@@ -10,15 +10,23 @@ var locations = [
 	];
 
 /*------View------*/
+var map;
 function initMap(){
+
     var self = this;
     this.searchTerm = ko.observable("");
     this.locationList = ko.observable([]);
 
-    var map = new google.maps.Map(document.getElementByID('map'), {
-        zoom: 15,
-        center: {lat:32.562047, lng: -95865392}
-    });
+    map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 32.562047, lng: -95.865392},
+          zoom: 13
+        });
+        var home = {lat: 32.549639, lng: -95.862328};
+        var marker = new google.maps.Marker({
+            position: home,
+            map: map,
+            title: 'Canton, Tx'
+            });
 
 }
 
