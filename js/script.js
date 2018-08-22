@@ -11,23 +11,104 @@ var locations = [
 
 /*------View------*/
 var map;
+var largeInfowindow;
+var bounds;
+var markers = ko.observableArray([]);
 function initMap(){
-
-    var self = this;
-    this.searchTerm = ko.observable("");
-    this.locationList = ko.observable([]);
 
     map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 32.562047, lng: -95.865392},
           zoom: 13
         });
-        var home = {lat: 32.549639, lng: -95.862328};
-        var marker = new google.maps.Marker({
-            position: home,
-            map: map,
-            title: 'Canton, Tx'
-            });
 
+    largeInfoWindow = new google.maps.InfoWindow();
+    bounds = new google.maps.LatLngBounds();
+    document.getElementById('show-places').addEventListener('click', showMarkers);
+    document.getElementById('hide-places').addEventListener('click', hideMarkers);
+}
+
+function showMarkers(){
+    for (var i=0; i<locations.length; i++){
+        var position = locations[i].location;
+        var title = locations[i].title;
+        var marker = new google.maps.Marker({
+            map: map,
+            position: position,
+            title: title,
+            animation: google.maps.Animation.DROP,
+            id: i
+        });
+
+        markers.push(marker);
+        marker.addListener('click', function(){
+            populateInfoWindow(this, largeInfoWindow);
+            bounce(this);
+            map.panTo(this.getPosition());
+        });
+        bounds.extend(marker.position);
+    }
+    map.fitBounds(bounds);
+}
+
+function hideMarkers(){
+    for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(null);
+    }
+}
+
+/*Code provided by Udacity by way of Google API lessons*/
+ function populateInfoWindow(marker, infowindow) {
+        // Check to make sure the infowindow is not already opened on this marker.
+        if (infowindow.marker != marker) {
+          // Clear the infowindow content to give the streetview time to load.
+          infowindow.setContent('');
+          infowindow.marker = marker;
+          // Make sure the marker property is cleared if the infowindow is closed.
+          infowindow.addListener('closeclick', function() {
+            infowindow.marker = null;
+          });
+          var streetViewService = new google.maps.StreetViewService();
+          var radius = 50;
+          // In case the status is OK, which means the pano was found, compute the
+          // position of the streetview image, then calculate the heading, then get a
+          // panorama from that and set the options
+          function getStreetView(data, status) {
+            if (status == google.maps.StreetViewStatus.OK) {
+              var nearStreetViewLocation = data.location.latLng;
+              var heading = google.maps.geometry.spherical.computeHeading(
+                nearStreetViewLocation, marker.position);
+                infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+                var panoramaOptions = {
+                  position: nearStreetViewLocation,
+                  pov: {
+                    heading: heading,
+                    pitch: 30
+                  }
+                };
+              var panorama = new google.maps.StreetViewPanorama(
+                document.getElementById('pano'), panoramaOptions);
+            } else {
+              infowindow.setContent('<div>' + marker.title + '</div>' +
+                '<div>No Street View Found</div>');
+            }
+          }
+          // Use streetview service to get the closest streetview image within
+          // 50 meters of the markers position
+          streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+          // Open the infowindow on the correct marker.
+          infowindow.open(map, marker);
+        }
+      }
+
+function bounce(marker){
+    if(marker.getAnimation() !== null){
+        marker.setAnimation(null);
+    }else{
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function(){
+            marker.setAnimation(null);
+        }, 1000);
+    }
 }
 
 function start(){
