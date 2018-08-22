@@ -7,10 +7,14 @@
   	<div class="container">
   		<div class="options-box">
   			<h1>My Local Neighborhood</h1>
-        Search: <input class="search-box" id="search-box" data-bind="textInput: searchTerm, valueUpdate: 'afterkeydown'"/>
+  			<p>
+  			<input id="show-places" type="button" value="Show Places">
+          	<input id="hide-places" type="button" value="Hide Places">
+          	</p>
+        	Search: <input class="search-box" id="search-box"/>
        		<div class="list" id="list">
-          		<ul class="results" id="results" data-bind="foreach: filteredList">
-         			<li class="place" id="place" data-bind="foreach: name, click: bounce"></li>
+          		<ul class="results" id="results"
+         			<li class="place" id="place"></li>
           		</ul>
         	</div>
   		</div>
@@ -21,7 +25,7 @@
    	<script src="js/libs/knockout.js"></script>
     <script src="js/script.js"></script>
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_U-7UCT4XtvvIkiJv8vnqoc9seTwDgPU&libraries=geometry&v=3&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_U-7UCT4XtvvIkiJv8vnqoc9seTwDgPU&libraries=places, geometry&v=3&callback=start">
     </script>
 
   </body>
