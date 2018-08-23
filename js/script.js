@@ -22,17 +22,17 @@ function initMap(){
         });
 
     largeInfoWindow = new google.maps.InfoWindow();
-    bounds = new google.maps.LatLngBounds();
+
+    ko.observable(mapView);
     document.getElementById('show-places').addEventListener('click', showMarkers);
     document.getElementById('hide-places').addEventListener('click', hideMarkers);
 }
 
-function showMarkers(){
+function mapView(){
     for (var i=0; i<locations.length; i++){
         var position = locations[i].location;
         var title = locations[i].title;
         var marker = new google.maps.Marker({
-            map: map,
             position: position,
             title: title,
             animation: google.maps.Animation.DROP,
@@ -45,6 +45,14 @@ function showMarkers(){
             bounce(this);
             map.panTo(this.getPosition());
         });
+    }
+
+}
+
+function showMarkers(){
+        bounds = new google.maps.LatLngBounds();
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
         bounds.extend(marker.position);
     }
     map.fitBounds(bounds);
@@ -55,6 +63,18 @@ function hideMarkers(){
           markers[i].setMap(null);
     }
 }
+
+function bounce(marker){
+    if(marker.getAnimation() !== null){
+        marker.setAnimation(null);
+    }else{
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function(){
+            marker.setAnimation(null);
+        }, 1000);
+    }
+}
+
 
 /*Code provided by Udacity by way of Google API lessons*/
  function populateInfoWindow(marker, infowindow) {
@@ -100,16 +120,6 @@ function hideMarkers(){
         }
       }
 
-function bounce(marker){
-    if(marker.getAnimation() !== null){
-        marker.setAnimation(null);
-    }else{
-        marker.setAnimation(google.maps.Animation.BOUNCE);
-        setTimeout(function(){
-            marker.setAnimation(null);
-        }, 1000);
-    }
-}
 
 function start(){
     ko.applyBindings(new initMap());
