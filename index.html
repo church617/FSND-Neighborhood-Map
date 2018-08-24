@@ -13,9 +13,12 @@
           	</p>
         	Search: <input class="search-box" id="search-box"/>
        		<div class="list" id="list">
-          		<ul class="results" id="results"
-         			<li class="place" id="place"></li>
-          		</ul>
+          		<ul class="places" data-bind="foreach: markers">
+                <li id="place">
+                  <span data-bind="text: title"></span>
+                  <a href="#" data-bind="click: $parent.bounce">Show</a>
+                </li>
+              </ul>
         	</div>
   		</div>
   	</div>
