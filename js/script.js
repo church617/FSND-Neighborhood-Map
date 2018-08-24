@@ -18,12 +18,18 @@ var markers = [];
 function initMap(){
 
     map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 32.562047, lng: -95.865392},
-          zoom: 13
+          center: {lat: 32.574205, lng: -95.891911},
+          zoom: 12
         });
 
+
+    mapView();
+    document.getElementById('show-places').addEventListener('click', showMarkers);
+    document.getElementById('hide-places').addEventListener('click', hideMarkers);
+}
+
+function mapView(){
     largeInfoWindow = new google.maps.InfoWindow();
-    bounds = new google.maps.LatLngBounds();
 
     for (var i=0; i<locations.length; i++){
         var position = locations[i].location;
@@ -41,23 +47,12 @@ function initMap(){
             bounce(this);
         });
     }
-    map.fitBounds(bounds);
-
-
-    ko.observable(mapView);
-    document.getElementById('show-places').addEventListener('click', showMarkers);
-    document.getElementById('hide-places').addEventListener('click', hideMarkers);
-}
-
-function mapView(){
-
 }
 
 function showMarkers(){
     for (var i = 0; i < markers.length; i++) {
         markers[i].setAnimation(google.maps.Animation.DROP);
         markers[i].setMap(map);
-        bounds.extend(markers[i].position);
     }
 
 }
