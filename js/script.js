@@ -11,9 +11,10 @@ var locations = [
 
 /*------View------*/
 var map;
-var largeInfowindow;
+var largeInfoWindow;
 var bounds;
-var markers = ko.observableArray([]);
+var marker;
+var markers = [];
 function initMap(){
 
     map = new google.maps.Map(document.getElementById('map'), {
@@ -22,13 +23,8 @@ function initMap(){
         });
 
     largeInfoWindow = new google.maps.InfoWindow();
+    bounds = new google.maps.LatLngBounds();
 
-    ko.observable(mapView);
-    document.getElementById('show-places').addEventListener('click', showMarkers);
-    document.getElementById('hide-places').addEventListener('click', hideMarkers);
-}
-
-function mapView(){
     for (var i=0; i<locations.length; i++){
         var position = locations[i].location;
         var title = locations[i].title;
@@ -43,19 +39,26 @@ function mapView(){
         marker.addListener('click', function(){
             populateInfoWindow(this, largeInfoWindow);
             bounce(this);
-            map.panTo(this.getPosition());
         });
     }
+    map.fitBounds(bounds);
+
+
+    ko.observable(mapView);
+    document.getElementById('show-places').addEventListener('click', showMarkers);
+    document.getElementById('hide-places').addEventListener('click', hideMarkers);
+}
+
+function mapView(){
 
 }
 
 function showMarkers(){
-        bounds = new google.maps.LatLngBounds();
     for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(map);
-        bounds.extend(marker.position);
+        bounds.extend(markers[i].position);
     }
-    map.fitBounds(bounds);
+
 }
 
 function hideMarkers(){
