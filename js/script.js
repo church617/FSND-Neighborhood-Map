@@ -55,6 +55,7 @@ function mapView(){
 
 function showMarkers(){
     for (var i = 0; i < markers.length; i++) {
+        markers[i].setAnimation(google.maps.Animation.DROP);
         markers[i].setMap(map);
         bounds.extend(markers[i].position);
     }
