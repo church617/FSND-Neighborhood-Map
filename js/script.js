@@ -40,15 +40,32 @@ var LocationMarker = function(data) {
 
     this.title = data.title;
     this.position = data.location;
+    this.street = '',
+    this.city = '',
+    this.phone = '';
 
     this.visible = ko.observable(true);
 
     // Style the markers a bit. This will be our listing marker icon.
-    var defaultIcon = makeMarkerIcon('ff0010');
+    var defaultIcon = makeMarkerIcon('ff0000');
     // Create a "highlighted location" marker color for when the user
     // mouses over the marker.
-    var highlightedIcon = makeMarkerIcon('00ff04');
+    var highlightedIcon = makeMarkerIcon('2eff00');
 
+    var clientID = '5FUGOWDUUFUIF5HXMI5PFABXBCBBDD1KVAVZEBJVA5UEE5DX';
+    var clientSecret = 'QFU21U45BOOK3ACQZM4U441YHXIQUKPFGGV2YFT5WJ4CF0DK';
+
+    // get JSON request of foursquare data
+    var reqURL = 'https://api.foursquare.com/v2/venues/search?ll=' + this.position.lat + ',' + this.position.lng + '&client_id=' + clientID + '&client_secret=' + clientSecret + '&v=20160118' + '&query=' + this.title;
+
+    $.getJSON(reqURL).done(function(data) {
+    var results = data.response.venues[0];
+        self.street = results.location.formattedAddress[0] ? results.location.formattedAddress[0]: 'N/A';
+        self.city = results.location.formattedAddress[1] ? results.location.formattedAddress[1]: 'N/A';
+        self.phone = results.contact.formattedPhone ? results.contact.formattedPhone : 'N/A';
+    }).fail(function() {
+        alert('Something went wrong with foursquare');
+    });
 
     // Create a marker per location, and put into markers array
     this.marker = new google.maps.Marker({
@@ -71,13 +88,14 @@ var LocationMarker = function(data) {
 
     // Create an onclick even to open an indowindow at each marker
     this.marker.addListener('click', function() {
-        populateInfoWindow(this, infoWindow);
+        populateInfoWindow(this, self.street, self.city, self.phone, infoWindow);
         toggleBounce(this);
+        map.panTo(this.getPosition());
     });
 
     // Two event listeners - one for mouseover, one for mouseout,
     // to change the colors back and forth.
-    // Code provided by Udacity through Google Maps API lessons
+    // Code was provided by Udacity by way of Google Maps API lessons
     this.marker.addListener('mouseover', function() {
         this.setIcon(highlightedIcon);
     });
@@ -130,7 +148,7 @@ var ViewModel = function() {
 
 // This function populates the infowindow when the marker is clicked.
 // Code was provided by Udacity by way of Google Maps API lessons
-function populateInfoWindow(marker, infowindow) {
+function populateInfoWindow(marker, street, city, phone, infowindow) {
     // Check to make sure the infowindow is not already opened on this marker.
     if (infowindow.marker != marker) {
         // Clear the infowindow content to give the streetview time to load.
@@ -144,7 +162,8 @@ function populateInfoWindow(marker, infowindow) {
         var streetViewService = new google.maps.StreetViewService();
         var radius = 50;
 
-        var windowContent = '<h4>' + marker.title + '</h4>';
+        var windowContent = '<h4>' + marker.title + '</h4>' +
+            '<p>' + street + "<br>" + city + '<br>' + phone + "</p>";
 
         // In case the status is OK, which means the pano was found, compute the
         // position of the streetview image, then calculate the heading, then get a
