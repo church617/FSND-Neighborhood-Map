@@ -90,7 +90,6 @@ var LocationMarker = function(data) {
     this.marker.addListener('click', function() {
         populateInfoWindow(this, self.street, self.city, self.phone, infoWindow);
         toggleBounce(this);
-        map.panTo(this.getPosition());
     });
 
     // Two event listeners - one for mouseover, one for mouseout,
