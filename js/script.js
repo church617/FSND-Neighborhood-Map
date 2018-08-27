@@ -44,10 +44,10 @@ var LocationMarker = function(data) {
     this.visible = ko.observable(true);
 
     // Style the markers a bit. This will be our listing marker icon.
-    var defaultIcon = makeMarkerIcon('0091ff');
+    var defaultIcon = makeMarkerIcon('ff0010');
     // Create a "highlighted location" marker color for when the user
     // mouses over the marker.
-    var highlightedIcon = makeMarkerIcon('FFFF24');
+    var highlightedIcon = makeMarkerIcon('00ff04');
 
 
     // Create a marker per location, and put into markers array
