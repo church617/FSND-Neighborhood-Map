@@ -207,8 +207,6 @@ function toggleBounce(marker) {
 }
 
 // This function takes in a COLOR, and then creates a new marker
-// icon of that color. The icon will be 21 px wide by 34 high, have an origin
-// of 0, 0 and be anchored at 10, 34).
 // Code was provided by Udacity by way of Google Maps API lessons
 function makeMarkerIcon(markerColor) {
     var markerImage = new google.maps.MarkerImage(
