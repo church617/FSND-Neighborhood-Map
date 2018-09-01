@@ -16,6 +16,7 @@ var bounds;
 
 // google maps init
 function start() {
+
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 3,
         center: {lat: 32.562047, lng: -95.865392},
@@ -204,6 +205,17 @@ function toggleBounce(marker) {
         marker.setAnimation(null);
     }, 1000);
   }
+}
+
+
+function toggleShow(){
+    var x = document.getElementById("menu");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+
 }
 
 // This function takes in a COLOR, and then creates a new marker
