@@ -1,12 +1,41 @@
 'use strict'
 /*------Model-----*/
-var locations = [
-        {title: 'First Monday Trade Days', location: {lat: 32.562047, lng: -95.865392}},
-        {title: 'Splash Kingdom Waterpark', location: {lat: 32.588923, lng: -95.877820}},
-        {title: 'Bakers Ribs', location: {lat: 32.583219, lng: -95.868936}},
-        {title: 'Four Winds Steakhouse', location: {lat: 32.640265, lng: -96.019094}},
-        {title: 'Mill creek Ranch Resort', location: {lat: 32.571839, lng: -95.850289}}
-	];
+var locations = [{
+        title: 'First Monday Trade Days',
+        location: {
+            lat: 32.562047,
+            lng: -95.865392
+        }
+    },
+    {
+        title: 'Splash Kingdom Waterpark',
+        location: {
+            lat: 32.588923,
+            lng: -95.877820
+        }
+    },
+    {
+        title: 'Bakers Ribs',
+        location: {
+            lat: 32.583219,
+            lng: -95.868936
+        }
+    },
+    {
+        title: 'Four Winds Steakhouse',
+        location: {
+            lat: 32.640265,
+            lng: -96.019094
+        }
+    },
+    {
+        title: 'Mill creek Ranch Resort',
+        location: {
+            lat: 32.571839,
+            lng: -95.850289
+        }
+    }
+];
 
 // declaring global variables
 var map;
@@ -18,7 +47,10 @@ function start() {
 
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 3,
-        center: {lat: 32.562047, lng: -95.865392},
+        center: {
+            lat: 32.562047,
+            lng: -95.865392
+        },
         mapTypeControl: false
     });
 
@@ -41,8 +73,8 @@ var LocationMarker = function(data) {
     this.title = data.title;
     this.position = data.location;
     this.street = '',
-    this.city = '',
-    this.phone = '';
+        this.city = '',
+        this.phone = '';
 
     this.visible = ko.observable(true);
 
@@ -59,9 +91,9 @@ var LocationMarker = function(data) {
     var reqURL = 'https://api.foursquare.com/v2/venues/search?ll=' + this.position.lat + ',' + this.position.lng + '&client_id=' + clientID + '&client_secret=' + clientSecret + '&v=20160118' + '&query=' + this.title;
 
     $.getJSON(reqURL).done(function(data) {
-    var results = data.response.venues[0];
-        self.street = results.location.formattedAddress[0] ? results.location.formattedAddress[0]: 'N/A';
-        self.city = results.location.formattedAddress[1] ? results.location.formattedAddress[1]: 'N/A';
+        var results = data.response.venues[0];
+        self.street = results.location.formattedAddress[0] ? results.location.formattedAddress[0] : 'N/A';
+        self.city = results.location.formattedAddress[1] ? results.location.formattedAddress[1] : 'N/A';
         self.phone = results.contact.formattedPhone ? results.contact.formattedPhone : 'N/A';
     }).fail(function() {
         alert('Something went wrong with foursquare');
@@ -75,9 +107,9 @@ var LocationMarker = function(data) {
         icon: defaultIcon
     });
 
-    self.filterMarkers = ko.computed(function () {
+    self.filterMarkers = ko.computed(function() {
         // set marker and extend bounds (showListings)
-        if(self.visible() === true) {
+        if (self.visible() === true) {
             self.marker.setMap(map);
             bounds.extend(self.marker.position);
             map.fitBounds(bounds);
@@ -118,7 +150,7 @@ var ViewModel = function() {
 
     // add location markers for each location
     locations.forEach(function(location) {
-        self.mapList.push( new LocationMarker(location) );
+        self.mapList.push(new LocationMarker(location));
     });
 
     // locations viewed on map
@@ -129,8 +161,8 @@ var ViewModel = function() {
                 var str = location.title.toLowerCase();
                 var result = str.includes(searchFilter);
                 location.visible(result);
-        return result;
-      });
+                return result;
+            });
         }
         self.mapList().forEach(function(location) {
             location.visible(true);
@@ -161,7 +193,7 @@ function populateInfoWindow(marker, street, city, phone, infowindow) {
         // In case the status is OK, which means the pano was found, compute the
         // position of the streetview image, then calculate the heading, then get a
         // panorama from that and set the options
-        var getStreetView = function (data, status) {
+        var getStreetView = function(data, status) {
             if (status == google.maps.StreetViewStatus.OK) {
                 var nearStreetViewLocation = data.location.latLng;
                 var heading = google.maps.geometry.spherical.computeHeading(
@@ -190,18 +222,18 @@ function populateInfoWindow(marker, street, city, phone, infowindow) {
 
 // Makes the marker bounce once clicked on to help show place on map
 function toggleBounce(marker) {
-  if (marker.getAnimation() !== null) {
-    marker.setAnimation(null);
-  } else {
-    marker.setAnimation(google.maps.Animation.BOUNCE);
-    setTimeout(function() {
+    if (marker.getAnimation() !== null) {
         marker.setAnimation(null);
-    }, 1000);
-  }
+    } else {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function() {
+            marker.setAnimation(null);
+        }, 1000);
+    }
 }
 
 
-function toggleShow(){
+function toggleShow() {
     var x = document.getElementById("menu-container");
     if (x.style.display === "none") {
         x.style.display = "block";
