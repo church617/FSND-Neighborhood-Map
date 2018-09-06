@@ -1,40 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Neighborhood Map</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   </head>
 
   <body>
     <span class="title">   My Neighborhood</span>
-      <p>
-        <button id="show_hide" onclick = "toggleShow()">Show/Hide Navbar</button>
-      </p>
       <div class="container">
           <form class="navbar-form navbar-right" role="search">
           <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search" name="w" data-bind="textInput: searchItem, valueUpdate: 'afterkeydown'">
+              <input type="text" class="form-control" placeholder="Search" name="w" data-bind="textInput: searchItem">
           </div>
         </form>
       </div>
 
 
-    <div id="map"></div>
-    <main class="container-fluid">
-
+    <div id="map" class="map-data"></div>
+    <div id="menu-container" class="container-fluid">
           <div id = "menu" class="dropdown">
-               <div class="dropdown" data-bind="foreach: locationList">
-                <p>
+            <div class="dropdown" data-bind="foreach: locationList">
+              <p>
                 <a href="#" class="dropdown" data-bind="text: title, click: show"></a>
               </p>
-               </div>
+            </div>
           </div>
-    </main>
+    </div>
 
     <script src='js/libs/jquery.js'></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="js/libs/knockout.js"></script>
     <script src="js/script.js"></script>
     <script async defer

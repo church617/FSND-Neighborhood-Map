@@ -1,12 +1,11 @@
-
+'use strict'
 /*------Model-----*/
 var locations = [
-		{title: 'First Monday Trade Days', location: {lat: 32.562047, lng: -95.865392}},
+        {title: 'First Monday Trade Days', location: {lat: 32.562047, lng: -95.865392}},
         {title: 'Splash Kingdom Waterpark', location: {lat: 32.588923, lng: -95.877820}},
         {title: 'Bakers Ribs', location: {lat: 32.583219, lng: -95.868936}},
         {title: 'Four Winds Steakhouse', location: {lat: 32.640265, lng: -96.019094}},
         {title: 'Mill creek Ranch Resort', location: {lat: 32.571839, lng: -95.850289}}
-
 	];
 
 // declaring global variables
@@ -107,12 +106,6 @@ var LocationMarker = function(data) {
     this.show = function(location) {
         google.maps.event.trigger(self.marker, 'click');
     };
-
-    // creates bounce effect when item selected
-    this.bounce = function(place) {
-    google.maps.event.trigger(self.marker, 'click');
-  };
-
 };
 
 /* View Model */
@@ -209,7 +202,7 @@ function toggleBounce(marker) {
 
 
 function toggleShow(){
-    var x = document.getElementById("menu");
+    var x = document.getElementById("menu-container");
     if (x.style.display === "none") {
         x.style.display = "block";
     } else {
